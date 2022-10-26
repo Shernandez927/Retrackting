@@ -1,15 +1,26 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const cTable = require("console.table");
-require('dotenv').config();
+// require('dotenv').config();
+const logo = require("asciiart-logo");
 
-const db = mysql.createConnection(
+const init = () => {
+  inquirer.prompt([
     {
-      host: 'localhost',
-      // MySQL Username
-      user: 'root',
-      password: '',
-      database: 'company_db'
-    },
-    console.log(`Connected to the company_db database.`)
-  );
+      type: "list",
+      message: "What would you like to do?",
+      name: "test",
+      choices: [
+        "View All Employees",
+        "Add new Employee",
+        "Update Employee Role",
+        "Add Role",
+        "View All Departments",
+        "Add Department",
+        "Quit"
+      ]
+    }
+  ]);
+};
+
+init();
