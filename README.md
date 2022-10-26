@@ -25,7 +25,7 @@ If your README is long, add a table of contents to make it easy for users to fin
 To initialize application:
 
 ```
-    node index.js
+    node server.js
 ```
 
 To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
@@ -73,7 +73,13 @@ SOFTWARE.
 
 ## Features
 
-If your project has a lot of features, list them here.
+- Inquirer v8.2.4
+
+- mySQL
+
+- Console.table
+
+- Asciiart-logo
 
 ## How to Contribute
 
