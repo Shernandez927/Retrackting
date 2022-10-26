@@ -1,9 +1,10 @@
-const inquirer = require("inquirer");
+import inquirer from "inquirer";
 // const mysql = require("mysql2");
 // const cTable = require("console.table");
-const logo = require("asciiart-logo");
+import logo from "asciiart-logo";
 // const db = require("./connection/connection");
-const { viewAllEmployees, addEmployee, updateRole, newRole, viewAllDepartments, newDepartment } = require("./helpers/index");
+import { viewAllEmployees, addEmployee, updateRole, newRole, viewAllDepartments, newDepartment } from "../helpers/index";
+
 const init = () => {
   console.log(
     logo({
@@ -18,7 +19,7 @@ const init = () => {
   beginPrompt();
 };
 
-const beginPrompt = () => {
+export default function beginPrompt() {
   inquirer
     .prompt([
       {
@@ -26,24 +27,23 @@ const beginPrompt = () => {
         message: "What would you like to do?",
         name: "promptChoice",
         choices: [
-          {name: "View All Employees", value: "viewAllEmployees"},
-          {name: "Add New Employee", value: "addNewEmployee"},
-          {name: "Update Employee Role", value: "updateEmployeeRole"},
-          {name: "Add Role", value: "addRole"},
-          {name: "View All Departments", value: "viewAllDepartments"},
-          {name: "Add Department", value: "addDepartment"},
+          "View All Employees",
+          "Add New Employee",
+          "Update Employee Role",
+          "Add Role",
+          "View All Departments",
+          "Add Department",
           "Quit",
         ],
       },
     ])
     .then((res) => {
-      let choice = res.choice;
       // Switch Statement to determine which function to run based on inquirer choice
-      switch (choice) {
-        case "viewAllEmployees":
+      switch (res.promptChoice) {
+        case "View All Employees":
           viewAllEmployees();
           break;
-        case "Add new Employee":
+        case "Add New Employee":
           addEmployee();
           break;
         case "Update Employee Role":
@@ -70,3 +70,5 @@ const quit = () => {
 };
 
 init();
+
+// module.exports = beginPrompt();
