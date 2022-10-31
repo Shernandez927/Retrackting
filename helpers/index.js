@@ -1,126 +1,184 @@
-import db from "../connection/connection";
-// const mysql = require("mysql2");
-// const cTable = require("console.table");
-import inquirer from "inquirer";
-// const beginPrompt = require("../server");
-import {beginPrompt} from "../server";
+// Importing SQL connection, console.table, and inquirer npm
+const db = require("../connection/connection");
+require("console.table");
+const inquirer = require("inquirer");
 
+// Placed Helper functions in a class for exporting
+class HelperFunctions {
+  constructor() {}
+  viewAllEmployees() {
+    db.query(
+      `SELECT employees.id, employees.first_name, employees.last_name, roles.title, department.department_name, roles.salary FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN department ON roles.department_id = department.id;`,
+      (err, res) => {
+        err ? console.log(err) : console.table("\n", res);
+        beginPrompt();
+      }
+    );
+  }
 
-const viewAllEmployees = () => {
-  db.query(
-    `SELECT id, first_name, last_name, role_id, manager_id from employees`,
-    function (err, results) {
-      console.table(results);
-    }
-  ); beginPrompt();
-};
+  addEmployee() {
+    db.query(`SELECT * FROM roles;`, (err, res) => {
+      let roles = res.map((roles) => ({
+        name: roles.title,
+        value: roles.id,
+      }));
 
-const addEmployee = () => {
-  console.log("done2");
-  inquirer.prompt([
-    {
-      type: "input",
-      message: "What's the employee's first name?",
-      name: "firstName",
-    },
-    {
-      type: "input",
-      message: "What's the employee's last name?",
-      name: "lastName",
-    },
-    {
-      type: "list",
-      message: "What role does this employee have?",
-      name: "employeeRole",
-      choices: [
-        "Sales Lead",
-        "Salesperson",
-        "Lead Engineer",
-        "Software Engineer",
-        "Account Manager",
-        "Accountant",
-        "Legal Team Lead",
-        "Lawyer",
-      ],
-    },
-    {
-      type: "list",
-      message: "Who is this employee's manager?",
-      name: "employeeManager",
-      choices: [],
-    },
-  ]);
-  db.query();
-};
+      db.query(`SELECT * FROM employees;`, (err, res) => {
+        let employees = res.map((employees) => ({
+          name: employees.first_name + " " + employees.last_name,
+          value: employees.id,
+        }));
 
-const updateRole = () => {
-  inquirer.prompt([
-    {
-      type: "list",
-      message: "Which employee's role did you want to update?",
-      name: "employeeRoleUpdate",
-      choices: [],
-    },
-    {
-      type: "",
-      message: "",
-      name: "",
-      choices: [
-        "Sales Lead",
-        "Salesperson",
-        "Lead Engineer",
-        "Software Engineer",
-        "Account Manager",
-        "Accountant",
-        "Legal Team Lead",
-        "Lawyer",
-      ],
-    },
-  ]);
+        inquirer
+          .prompt([
+            {
+              type: "input",
+              message: "What's the employee's first name?",
+              name: "firstName",
+            },
+            {
+              type: "input",
+              message: "What's the employee's last name?",
+              name: "lastName",
+            },
+            {
+              type: "list",
+              message: "What role does this employee have?",
+              name: "employeeRole",
+              choices: roles,
+            },
+            {
+              type: "list",
+              message: "Who is this employee's manager?",
+              name: "employeeManager",
+              choices: employees,
+            },
+          ])
+          .then((res) => {
+            db.query(
+              `INSERT INTO employees SET ?`,
+              {
+                first_name: res.firstName,
+                last_name: res.lastName,
+              },
+              (err, res) => {
+                err
+                  ? console.log(err)
+                  : console.log("Successfully Added New Employee! ✅");
+                beginPrompt();
+              }
+            );
+          });
+      });
+    });
+  }
 
-  db.query();
-};
+  updateRole() {
+    db.query(`SELECT * FROM employees;`, (err, res) => {
+      let employees = res.map((employees) => ({
+        name: employees.first_name + " " + employees.last_name,
+        value: employees.id,
+      }));
+      db.query(`SELECT * FROM roles;`, (err, res) => {
+        let roles = res.map((roles) => ({
+          name: roles.title,
+          value: roles.id,
+        }));
 
-const newRole = () => {
-  inquirer.prompt([
-    { 
-    type: "input",
-    message: "What's the role you'd like to add?",
-    name: "newRole"
-    }
-]);
-};
+        inquirer
+          .prompt([
+            {
+              type: "list",
+              message: "Which employee's role did you want to update?",
+              name: "employeeRoleUpdate",
+              choices: employees,
+            },
+            {
+              type: "list",
+              message: "What would you like to update their role to?",
+              name: "updatedRole",
+              choices: roles,
+            },
+          ])
+          .then((res) => {
+            db.query(
+              `UPDATE employees SET ? WHERE ?`,
+              [
+                {
+                  role_id: res.updateRole,
+                },
+                {
+                  id: res.employeeRoleUpdate,
+                },
+              ],
+              (err, res) => {
+                err
+                  ? console.log(err)
+                  : console.log("Employee Role Successfully Updated! ✅");
+                beginPrompt();
+              }
+            );
+          });
+      });
+    });
+  }
 
-const viewAllDepartments = () => {
-  db.query(
-    `SELECT id, department_name from department`,
-    function (err, results) {
-      console.table(results);
-    }
-  );
-};
+  newRole() {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "What's the role you'd like to add?",
+          name: "newRole",
+        },
+      ])
+      .then((res) => {
+        db.query(
+          `INSERT INTO department SET ?`,
+          [
+            {
+              title: res.newRole,
+            },
+          ],
+          (err, res) => {
+            err ? console.log(err) : console.log("Role Successfully Added! ✅");
+            beginPrompt();
+          }
+        );
+      });
+  }
 
-const newDepartment = () => {
-  inquirer.prompt([
-    { 
-        type: "input",
-        message: "What's the name of the department you'd like to add?",
-        name: "newDepartment"
-        }
-  ])
-};
+  viewAllDepartments() {
+    db.query(
+      `SELECT id AS ID, department_name AS Name from department`,
+      (err, res) => {
+        err ? console.log(err) : console.table("\n", res);
+        beginPrompt();
+      }
+    );
+  }
 
-export default {
-  viewAllEmployees,
-  addEmployee,
-  updateRole,
-  newRole,
-  viewAllDepartments,
-  newDepartment,
-};
-
-// class Employee {
-//     constructor(db) {
-//         this.db = db
-//     }
-// }
+  newDepartment() {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "What's the name of the department you'd like to add?",
+          name: "newDepartment",
+        },
+      ])
+      .then((res) => {
+        db.query(
+          "INSERT INTO department SET ?",
+          {
+            department_name: res.newDepartment,
+          },
+          (err, res) => {
+            console.log("Successfully Added Department! ✅");
+            beginPrompt();
+          }
+        );
+      });
+  }
+}
+module.exports = { Helpers: new HelperFunctions() };

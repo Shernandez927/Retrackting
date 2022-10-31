@@ -1,11 +1,11 @@
-import inquirer from "inquirer";
-// const mysql = require("mysql2");
-// const cTable = require("console.table");
-import logo from "asciiart-logo";
-// const db = require("./connection/connection");
-import { viewAllEmployees, addEmployee, updateRole, newRole, viewAllDepartments, newDepartment } from "../helpers/index";
+// Imports Inquirer npm, connection to sql, console.table npm, asciiart-logo npm
+const inquirer = require("inquirer");
+require("console.table");
+const logo = require("asciiart-logo");
+const { Helpers } = require("./helpers/index");
 
-const init = () => {
+// Displays AsciiArt logo
+init = () => {
   console.log(
     logo({
       name: "Employee Tracker",
@@ -19,7 +19,8 @@ const init = () => {
   beginPrompt();
 };
 
-export default function beginPrompt() {
+// Beginning Inquirer Prompt asking user what task to start with
+beginPrompt = () => {
   inquirer
     .prompt([
       {
@@ -41,22 +42,22 @@ export default function beginPrompt() {
       // Switch Statement to determine which function to run based on inquirer choice
       switch (res.promptChoice) {
         case "View All Employees":
-          viewAllEmployees();
+          Helpers.viewAllEmployees();
           break;
         case "Add New Employee":
-          addEmployee();
+          Helpers.addEmployee();
           break;
         case "Update Employee Role":
-          updateRole();
+          Helpers.updateRole();
           break;
         case "Add Role":
-          newRole();
+          Helpers.newRole();
           break;
         case "View All Departments":
-          viewAllDepartments();
+          Helpers.viewAllDepartments();
           break;
         case "Add Department":
-          newDepartment();
+          Helpers.newDepartment();
           break;
         default:
           quit();
@@ -64,11 +65,10 @@ export default function beginPrompt() {
     });
 };
 
+// Function to "quit" or terminate Node.js process
 const quit = () => {
   console.log("Thanks for stopping by! 👋 ");
   process.exit();
 };
 
 init();
-
-// module.exports = beginPrompt();

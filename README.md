@@ -2,14 +2,11 @@
 
 ## Description
 
-- What was your motivation?
-- Why did you build this project? (Note: the answer is not "Because it was a homework assignment.")
-- What problem does it solve?
-- What did you learn?
+- This Employee Tracker was created to better understand using mySQL to get more familiarized with creating and manipulating databases.
+
+- This project uses input from the Inquirer npm to update and add to the existing tables within the created database from mySQL and displays them in the terminal via the console.table npm.
 
 ## Table of Contents
-
-If your README is long, add a table of contents to make it easy for users to find what they need.
 
 - [Installation](#installation)
 - [Usage](#usage)
@@ -18,9 +15,63 @@ If your README is long, add a table of contents to make it easy for users to fin
 
 ## Installation
 
+To ensure the proper dependencies are installed, use the following terminal commands within the root directory:
+
+```
+    npm install
+```
+
+```
+    npm install inquirer@8.2.4
+```
+
+```
+    npm install console.table
+```
+
+```
+    npm install asciiart-logo
+```
+
+```
+    npm install mysql
+```
+
+```
+    npm install dotenv --save
+```
 
 
 ## Usage
+
+Before initializing application, source the schema.sql and seeds.sql file with the following commands:
+
+mySQL Login:
+
+```
+    mysql -u root -p
+```
+
+Source Schema File:
+
+```
+    source db/schema.sql;
+```
+
+Source Seeds File:
+
+```
+    source db/seeds.sql;
+```
+
+To Quit mySQL:
+
+```
+    quit;
+```
+
+Before Initializing, go the the .env.EXAMPLE file, enter your mySQL information, and rename the file to a .env file.
+
 
 To initialize application:
 
@@ -36,11 +87,11 @@ To add a screenshot, create an `assets/images` folder in your repository and upl
 
 ## Credits
 
-List your collaborators, if any, with links to their GitHub profiles.
+Debugging:
 
-If you used any third-party assets that require attribution, list the creators with links to their primary web presence in this section.
+- Salissa Hernandez: (https://github.com/Salissa4)
 
-If you followed tutorials, include links to those here as well.
+- Shawn Tschoepe: (https://github.com/shawn220a)
 
 ## License
 
@@ -81,10 +132,7 @@ SOFTWARE.
 
 - Asciiart-logo
 
-## How to Contribute
-
-If you created an application or package and would like other developers to contribute it, you can include guidelines for how to do so. The [Contributor Covenant](https://www.contributor-covenant.org/) is an industry standard, but you can always write your own if you'd prefer.
 
 ## Tests
 
-Go the extra mile and write tests for your application. Then provide examples on how to run them here.
+No Tests written... yet.
