@@ -79,11 +79,9 @@ To initialize application:
     node server.js
 ```
 
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
+Link to Demo Video:
 
-    ```md
-    ![alt text](assets/images/screenshot.png)
-    ```
+(https://drive.google.com/file/d/1MldxFhcf8Y_4bWtUKAhut_itP5thY4fg/view)
 
 ## Credits
 
