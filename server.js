@@ -30,10 +30,13 @@ beginPrompt = () => {
         choices: [
           "View All Employees",
           "Add New Employee",
+          "Delete Employee",
           "Update Employee Role",
           "Add Role",
+          "Delete Role",
           "View All Departments",
           "Add Department",
+          "Delete Department",
           "Quit",
         ],
       },
@@ -47,17 +50,26 @@ beginPrompt = () => {
         case "Add New Employee":
           Helpers.addEmployee();
           break;
+        case "Delete Employee":
+          Helpers.deleteEmployee();
+          break;
         case "Update Employee Role":
           Helpers.updateRole();
           break;
         case "Add Role":
           Helpers.newRole();
           break;
+        case "Delete Role":
+          Helpers.deleteRole();
+          break;
         case "View All Departments":
           Helpers.viewAllDepartments();
           break;
         case "Add Department":
           Helpers.newDepartment();
+          break;
+        case "Delete Department":
+          Helpers.deleteDepartment();
           break;
         default:
           quit();

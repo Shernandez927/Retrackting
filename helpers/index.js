@@ -8,7 +8,7 @@ class HelperFunctions {
   constructor() {}
   viewAllEmployees() {
     db.query(
-      `SELECT employees.id, employees.first_name, employees.last_name, roles.title, department.department_name, roles.salary FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN department ON roles.department_id = department.id;`,
+      `SELECT employees.id, employees.first_name, employees.last_name FROM employees;`,
       (err, res) => {
         err ? console.log(err) : console.table("\n", res);
         beginPrompt();
@@ -180,5 +180,103 @@ class HelperFunctions {
         );
       });
   }
+
+  deleteEmployee() {
+    db.query(`SELECT * FROM employees;`, (err, res) => {
+      let employees = res.map((employees) => ({
+        name: employees.first_name + " " + employees.last_name,
+        value: employees.id,
+      }));
+      inquirer
+        .prompt([
+          {
+            type: "list",
+            message: "Which employee would you like to delete?",
+            name: "deletedEmployee",
+            choices: employees,
+          },
+        ])
+        .then((res) => {
+          db.query(
+            `DELETE FROM employees WHERE ?`,
+            {
+              id: res.deletedEmployee,
+            },
+            (err, res) => {
+              err
+                ? console.log(err)
+                : console.log("Employee Successfully Removed! 🗑️");
+              beginPrompt();
+            }
+          );
+        });
+    });
+  }
+
+  deleteRole() {
+    db.query(`SELECT * FROM roles;`, (err, res) => {
+      let roles = res.map((roles) => ({
+        name: roles.title,
+        value: roles.id,
+      }));
+      inquirer
+        .prompt([
+          {
+            type: "list",
+            message: "Which role would you like to delete?",
+            name: "deletedRole",
+            choices: roles,
+          },
+        ])
+        .then((res) => {
+          db.query(
+            `DELETE FROM roles WHERE ?`,
+            {
+              id: res.deletedRole,
+            },
+            (err, res) => {
+              err
+                ? console.log(err)
+                : console.log("Role Successfully Removed! 🗑️");
+              beginPrompt();
+            }
+          );
+        });
+    });
+  }
+
+  deleteDepartment() {
+    db.query(`SELECT * FROM department;`, (err, res) => {
+      let departments = res.map((departments) => ({
+        name: departments.department_name,
+        value: departments.id,
+      }));
+      inquirer
+        .prompt([
+          {
+            type: "list",
+            message: "Which department would you like to delete?",
+            name: "deletedDepartment",
+            choices: departments,
+          },
+        ])
+        .then((res) => {
+          db.query(
+            `DELETE FROM department WHERE ?`,
+            {
+              id: res.deletedDepartment,
+            },
+            (err, res) => {
+              err
+                ? console.log(err)
+                : console.log("Role Successfully Removed! 🗑️");
+              beginPrompt();
+            }
+          );
+        });
+    });
+  }
 }
+
+
 module.exports = { Helpers: new HelperFunctions() };
