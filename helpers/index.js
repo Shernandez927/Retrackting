@@ -131,13 +131,19 @@ class HelperFunctions {
           message: "What's the role you'd like to add?",
           name: "newRole",
         },
+        {
+          type: "input",
+          message: "What's the salary for this role?",
+          name: "newRoleSalary",
+        }
       ])
       .then((res) => {
         db.query(
-          `INSERT INTO department SET ?`,
+          `INSERT INTO roles SET ?`,
           [
             {
               title: res.newRole,
+              salary: res.newRoleSalary
             },
           ],
           (err, res) => {
